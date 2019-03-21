@@ -1,8 +1,8 @@
-name:                ln-ui-core
+name:                lnforum-ui-core
 version:             0.1.0.3
-synopsis:            Core routines for ln-ui-*
+synopsis:            Core routines for lnforum-ui-*
 description:         Please see README.md
-homepage:            https://github.com/adarqui/ln-ui-core#readme
+homepage:            https://github.com/adarqui/lnforum-ui-core#readme
 license:             BSD3
 license-file:        LICENSE
 author:              Andrew Darqui
@@ -67,17 +67,17 @@ library
                      , haskell-api-helpers-shared
                      , haskell-ebyam
                      , haskell-either-helpers
-                     , haskell-ln-types
+                     , lnforum-types-gen
                      , haskell-rehtie
-                     , ln-validate
+                     , lnforum-validate
   if impl(ghcjs)
-    build-depends:     ghcjs-base, ghcjs-ajax, ln-api-ghcjs, haskell-api-helpers-ghcjs
+    build-depends:     ghcjs-base, ghcjs-ajax, lnforum-api-ghcjs, haskell-api-helpers-ghcjs
   else
-    build-depends:     ln-api, haskell-api-helpers
+    build-depends:     lnforum-api, haskell-api-helpers
   ghc-options:         -Wall
   default-language:    Haskell2010
 
-test-suite ln-ui-test
+test-suite lnforum-ui-test
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
   main-is:             Spec.hs
@@ -89,11 +89,11 @@ test-suite ln-ui-test
                      , hspec
                      , text
                      , web-routes
-                     , haskell-ln-types
-                     , ln-ui-core
+                     , lnforum-types-gen
+                     , lnforum-ui-core
   ghc-options:         -Wall -O2 -threaded -rtsopts -with-rtsopts=-N
   default-language:    Haskell2010
 
 source-repository head
   type:     git
-  location: https://github.com/adarqui/ln-ui-core
+  location: https://github.com/adarqui/lnforum-ui-core

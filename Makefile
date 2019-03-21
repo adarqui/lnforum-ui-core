@@ -11,4 +11,4 @@ make tests:
 	stack test --fast
 
 ghci:
-	stack ghci ln-ui-core
+	stack ghci lnforum-ui-core

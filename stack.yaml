@@ -12,6 +12,7 @@ packages:
 - '../haskell-ifte'
 - '../haskell-either-helpers'
 - '../web-routes'
-extra-deps: []
+extra-deps:
+- html-entities-1.1.4.2
 flags: {}
 extra-package-dbs: []

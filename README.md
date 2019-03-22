@@ -7,4 +7,4 @@ Yet another repo! YAR! We will try to split the core UI routines out from any of
 - lnforum-ui-cli
 - lnforum-ui-...
 
-Thus, all of those libraries will use ln-core as their base.
+Thus, all of those libraries will use lnforum-core as their base.

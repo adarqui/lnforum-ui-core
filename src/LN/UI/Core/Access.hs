@@ -9,9 +9,6 @@ module LN.UI.Core.Access (
   HasAccess,
   open,
   empty,
-  isMemberOfOrganization,
-  isMemberOfOrganizationHTML,
-  isMemberOfOrganizationHTML',
   permissionsHTML,
   permissionsHTML',
   permCreateEmpty,
@@ -28,15 +25,7 @@ module LN.UI.Core.Access (
   ifte_Self,
   ifte_NotSelf,
   self,
-  notSelf,
-  ifte_OrgMember,
-  orgMember,
-  orgMemberHTML,
-  orgMemberHTML',
-  ifte_OrgOwner,
-  orgOwner,
-  orgOwnerHTML,
-  orgOwnerHTML'
+  notSelf
 ) where
 
 
@@ -49,44 +38,6 @@ import           LN.UI.Core.Types
 class Monoid m => HasAccess m where
   open :: m -> m
   empty :: m
-
-
-
--- | Check whether a user is a member of Team_Members
---
-isMemberOfOrganization :: OrganizationPackResponse -> Bool
-isMemberOfOrganization OrganizationPackResponse{..} = Team_Members `elem` organizationPackResponseTeams
-
-
-
--- | Supports handlers for if a user is/isnt a member
---
-isMemberOfOrganizationHTML
-  :: forall m. HasAccess m
-  => OrganizationPackResponse
-  -> m
-  -> m
-  -> m
-
-isMemberOfOrganizationHTML pack is_member_handler isnt_member_handler =
-  if isMemberOfOrganization pack
-    then is_member_handler
-    else isnt_member_handler
-
-
-
--- | Supports a handler if a user is a member
---
-isMemberOfOrganizationHTML'
-  :: forall m. HasAccess m
-  => OrganizationPackResponse
-  -> m
-  -> m
-
-isMemberOfOrganizationHTML' pack is_member_handler =
-  if isMemberOfOrganization pack
-    then is_member_handler
-    else empty
 
 
 
@@ -201,63 +152,3 @@ self my_id questionable_id = my_id == questionable_id
 
 notSelf :: UserId -> UserId -> Bool
 notSelf my_id questionable_id = my_id /= questionable_id
-
-
-
---
--- Owner Helpers
---
-
-ifte_OrgOwner :: forall m. HasAccess m => OrganizationPackResponse -> m -> m -> m
-ifte_OrgOwner pack t e =
-  if orgOwner pack
-     then t
-     else e
-
-
-
-orgOwner :: OrganizationPackResponse -> Bool
-orgOwner OrganizationPackResponse{..} = Team_Owners `elem` organizationPackResponseTeams
-
-
-
-orgOwnerHTML :: forall m. HasAccess m => OrganizationPackResponse -> m -> m -> m
-orgOwnerHTML pack owner_cb no_owner_cb =
-  if orgOwner pack
-    then owner_cb
-    else no_owner_cb
-
-
-
-orgOwnerHTML' :: forall m. HasAccess m => OrganizationPackResponse -> m -> m
-orgOwnerHTML' pack owner_cb = orgOwnerHTML pack owner_cb empty
-
-
-
---
--- Member helpers
---
-
-ifte_OrgMember :: forall m. HasAccess m => OrganizationPackResponse -> m -> m -> m
-ifte_OrgMember pack t e =
-  if orgMember pack
-     then t
-     else e
-
-
-
-orgMember :: OrganizationPackResponse -> Bool
-orgMember OrganizationPackResponse{..} = Team_Members `elem` organizationPackResponseTeams
-
-
-
-orgMemberHTML :: forall m. HasAccess m => OrganizationPackResponse -> m -> m -> m
-orgMemberHTML pack member_cb no_member_cb =
-  if orgMember pack
-    then member_cb
-    else no_member_cb
-
-
-
-orgMemberHTML' :: forall m. HasAccess m => OrganizationPackResponse -> m -> m
-orgMemberHTML' pack member_cb = orgMemberHTML pack member_cb empty

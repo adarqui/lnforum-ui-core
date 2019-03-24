@@ -9,16 +9,12 @@ module LN.UI.Core.App.Board (
   , setDescription
   , clearDescription
   , setIsAnonymous
-  , setCanCreateSubBoards
+  , setCanCreateBoards
   , setCanCreateThreads
   , setTag
   , addTag
   , deleteTag
   , clearTags
-  , setSuggestedTag
-  , addSuggestedTag
-  , deleteSuggestedTag
-  , clearSuggestedTags
 ) where
 
 
@@ -55,9 +51,9 @@ setIsAnonymous !request@BoardRequest{..} !input =
 
 
 
-setCanCreateSubBoards :: BoardRequest -> Bool -> Action
-setCanCreateSubBoards !request@BoardRequest{..} !input =
-  ApplyState (\st->st{_m_boardRequest = Just $ request{boardRequestCanCreateSubBoards = input }})
+setCanCreateBoards :: BoardRequest -> Bool -> Action
+setCanCreateBoards !request@BoardRequest{..} !input =
+  ApplyState (\st->st{_m_boardRequest = Just $ request{boardRequestCanCreateBoards = input }})
 
 
 
@@ -68,22 +64,26 @@ setCanCreateThreads !request@BoardRequest{..} !input =
 
 
 setTag :: BoardRequest -> Text -> Action
-setTag !request@BoardRequest{..} !input =
-   ApplyState (\st->
-     st{
-       _m_boardRequest = Just $ request{boardRequestStateTag = Just input}
-     })
+setTag _ _ =
+   ApplyState id
+-- setTag t@BoardRequest{..} !input =
+   -- ApplyState (\st->
+   --   st{
+   --     _m_boardRequest = Just $ request{boardRequestStateTag = Just input}
+   --   })
 
 
 
 addTag :: BoardRequest -> Action
-addTag !request@BoardRequest{..} =
-  ApplyState (\st->
-    st{
-      _m_boardRequest = Just $ request{boardRequestTags = tags, boardRequestStateTag = Nothing}
-    })
-  where
-  (tags, _) = Tag.addTag boardRequestTags boardRequestStateTag
+addTag _ =
+  ApplyState id
+-- addTag !request@BoardRequest{..} =
+  -- ApplyState (\st->
+  --   st{
+  --     _m_boardRequest = Just $ request{boardRequestTags = tags, boardRequestStateTag = Nothing}
+  --   })
+  -- where
+  -- (tags, _) = Tag.addTag boardRequestTags boardRequestStateTag
 
 
 
@@ -101,40 +101,3 @@ deleteTag !request@BoardRequest{..} !idx =
 clearTags :: BoardRequest -> Action
 clearTags !request@BoardRequest{..} =
   ApplyState (\st->st{_m_boardRequest = Just $ request{boardRequestTags = []}})
-
-
-
-setSuggestedTag :: BoardRequest -> Text -> Action
-setSuggestedTag !request@BoardRequest{..} !input =
-   ApplyState (\st->
-     st{
-       _m_boardRequest = Just $ request{boardRequestStateSuggestedTag = Just input}
-     })
-
-
-
-addSuggestedTag :: BoardRequest -> Action
-addSuggestedTag !request@BoardRequest{..} =
-  ApplyState (\st->
-    st{
-      _m_boardRequest = Just $ request{boardRequestSuggestedTags = tags, boardRequestStateSuggestedTag = Nothing}
-    })
-  where
-  (tags, _) = Tag.addTag boardRequestSuggestedTags boardRequestStateSuggestedTag
-
-
-
-deleteSuggestedTag :: BoardRequest -> Int -> Action
-deleteSuggestedTag !request@BoardRequest{..} !idx =
-  ApplyState (\st->
-    st{
-      _m_boardRequest = Just $ request{boardRequestSuggestedTags = tags}
-    })
-  where
-  tags = Tag.deleteTag boardRequestSuggestedTags idx
-
-
-
-clearSuggestedTags :: BoardRequest -> Action
-clearSuggestedTags !request@BoardRequest{..} =
-  ApplyState (\st->st{_m_boardRequest = Just $ request{boardRequestSuggestedTags = []}})

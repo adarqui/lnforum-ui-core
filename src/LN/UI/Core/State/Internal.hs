@@ -39,14 +39,10 @@ data Store = Store {
       , _l_m_me                   :: !(Loader (Maybe UserResponse))
       , _meId                     :: !UserId
       , _usersCache               :: !(Map UserId UserSanitizedPackResponse)
-      , _l_organizations          :: !(Loader (Map OrganizationId OrganizationPackResponse))
       , _l_users                  :: !(Loader (Map UserId UserSanitizedPackResponse))
-      , _l_forums                 :: !(Loader (Map ForumId ForumPackResponse))
       , _l_boards                 :: !(Loader (Map BoardId BoardPackResponse))
       , _l_threads                :: !(Loader (Map ThreadId ThreadPackResponse))
       , _l_threadPosts            :: !(Loader (Map ThreadId ThreadPostPackResponse))
-      , _l_m_organization         :: !(Loader (Maybe OrganizationPackResponse))
-      , _m_organizationRequest    :: !(Maybe OrganizationRequest)
       , _l_m_user                 :: !(Loader (Maybe UserSanitizedPackResponse))
       , _l_m_forum                :: !(Loader (Maybe ForumPackResponse))
       , _m_forumRequest           :: !(Maybe ForumRequest)
@@ -71,14 +67,10 @@ defaultStore = Store {
       , _l_m_me                   = Loaded Nothing
       , _meId                     = 0
       , _usersCache               = Map.empty
-      , _l_organizations          = Loaded Map.empty
       , _l_users                  = Loaded Map.empty
-      , _l_forums                 = Loaded Map.empty
       , _l_boards                 = Loaded Map.empty
       , _l_threads                = Loaded Map.empty
       , _l_threadPosts            = Loaded Map.empty
-      , _l_m_organization         = Loaded Nothing
-      , _m_organizationRequest    = Nothing
       , _l_m_user                 = Loaded Nothing
       , _l_m_forum                = Loaded Nothing
       , _m_forumRequest           = Nothing
@@ -131,9 +123,6 @@ data Action
   | SaveThreadPostInPlace
 
   | DoLike Ent Int64 (Maybe LikeRequest) -- Like, Neutral, Dislike, or Unlike something
-  | DoStar Ent Int64 (Maybe StarRequest) -- Star, Unstar
-
-  | JoinOrganization                     -- Join the current organization
 
   | ApplyState (Store -> Store)          -- ^ used only be ln-ui-* frontends. This is how they can set
                                          -- the Store state, using the same Action sum type

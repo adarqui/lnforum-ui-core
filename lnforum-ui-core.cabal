@@ -11,7 +11,7 @@ copyright:           2016 Andrew Darqui
 category:            Development
 build-type:          Simple
 -- extra-source-files:
-cabal-version:       >=1.10
+cabal-version:       >=1.24
 
 library
   hs-source-dirs:      src
@@ -21,7 +21,6 @@ library
                        LN.UI.Core.App
                        LN.UI.Core.App.Board
                        LN.UI.Core.App.Forum
-                       LN.UI.Core.App.Organization
                        LN.UI.Core.App.Profile
                        LN.UI.Core.App.Tag
                        LN.UI.Core.App.Thread

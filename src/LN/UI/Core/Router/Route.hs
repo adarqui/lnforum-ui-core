@@ -98,6 +98,8 @@ data Route
   | Me
   | Errors
   | Portal
+  | Forums CRUD
+  -- TODO FIXME: should this be ForumsBoards..?
   | Boards CRUD
   | BoardsThreads Text CRUD
   | BoardsThreadsPosts Text Text CRUD
@@ -123,6 +125,10 @@ instance HasLinkName Route where
     About                           -> "About"
     Portal                          -> "Portal"
     Boards Index               -> "Boards"
+    Forums New -> "New"
+    Forums (ShowS forum_sid) -> forum_sid
+    Forums (EditS forum_sid) -> forum_sid
+    Forums (DeleteS forum_sid) -> forum_sid
     Boards New                 -> "New"
     Boards   (ShowS board_sid)   -> board_sid
     Boards   (EditS board_sid)   -> board_sid

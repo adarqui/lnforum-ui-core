@@ -227,7 +227,7 @@ runCore st core_result action         = runCoreM st $ do
             let BoardPackResponse{..} = board_pack
             modify (\st'->st'{
                 _l_m_board      = Loaded $ Just board_pack
-              , _m_boardRequest = Just $ boardResponseToBoardRequest Nothing boardPackResponseBoard
+              , _m_boardRequest = Just $ boardResponseToBoardRequest boardPackResponseBoard
             })
             done
         _ -> cantLoad_board

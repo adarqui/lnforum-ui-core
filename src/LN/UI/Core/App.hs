@@ -82,7 +82,6 @@ runCore st core_result action         = runCoreM st $ do
 
   fetch_init = do
     lr <- api getMe'
-    liftIO $ putStrLn $ "WTF: me: " <> show lr
     rehtie lr (const cantLoad_init) $ \user_pack -> do
       let UserResponse{..} = user_pack
       modify (\st_->st_{_l_m_me = Loaded $ Just user_pack, _meId = userResponseId})
@@ -223,7 +222,6 @@ runCore st core_result action         = runCoreM st $ do
     fetch_boot = do
       Store{..} <- get
       lr <- api $ getBoardPacks'
-      liftIO $ putStrLn $ "WTF: board_packs: " <> show lr
       rehtie lr (const cantLoad_boot) $ \board_packs -> do
         let BoardPackResponses{..} = board_packs
         modify (\st'->st'{

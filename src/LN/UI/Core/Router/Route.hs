@@ -80,6 +80,7 @@ fromRouteWithHash = textToJSString' . ("#" <>) <$> fromRouteWith
 
 
 toRouteWith :: ByteString -> RouteWith
+toRouteWith ""  = routeWith' Home
 toRouteWith url =
   case (fromPathInfoParams url) of
     Left _               -> routeWith' NotFound
@@ -183,26 +184,26 @@ instance HasCrumb Route where
 instance PathInfo Route where
 
   toPathSegments route = case route of
-    Home                     -> pure ""
-    About                    -> pure "about"
-    Me                       -> pure "me"
-    Errors                   -> pure "errors"
-    Portal                   -> pure "portal"
-    Boards  Index -> mempty
-    Boards  crud -> toPathSegments crud
-    BoardsThreads  board_sid Index -> pure board_sid
-    BoardsThreads  board_sid crud -> pure board_sid <> toPathSegments crud
-    BoardsThreadsPosts  board_sid thread_sid Index -> pure board_sid <> pure thread_sid
-    BoardsThreadsPosts  board_sid thread_sid crud -> pure board_sid <> pure thread_sid <> toPathSegments crud
-    Users Index                -> pure "users"
-    Users crud                 -> (pure "users") <> toPathSegments crud
-    UsersProfile user_sid Index -> (pure "users") <> (pure user_sid) <> (pure "profile")
-    UsersProfile user_sid crud  -> (pure "users") <> (pure user_sid) <> (pure "profile") <> toPathSegments crud
-    Experiments experiment_sid -> pure "experiments" <> pure experiment_sid
-    _                          -> pure ""
+    Home                                           -> pure ""
+    About                                          -> pure "about"
+    Me                                             -> pure "me"
+    Errors                                         -> pure "errors"
+    Portal                                         -> pure "portal"
+    Boards Index                                   -> mempty
+    Boards crud                                    -> toPathSegments crud
+    BoardsThreads board_sid Index                  -> pure board_sid
+    BoardsThreads board_sid crud                   -> pure board_sid <> toPathSegments crud
+    BoardsThreadsPosts board_sid thread_sid Index  -> pure board_sid <> pure thread_sid
+    BoardsThreadsPosts board_sid thread_sid crud   -> pure board_sid <> pure thread_sid <> toPathSegments crud
+    Users Index                                    -> pure "users"
+    Users crud                                     -> pure "users" <> toPathSegments crud
+    UsersProfile user_sid Index                    -> (pure "users") <> (pure user_sid) <> (pure "profile")
+    UsersProfile user_sid crud                     -> (pure "users") <> (pure user_sid) <> (pure "profile") <> toPathSegments crud
+    Experiments experiment_sid                     -> pure "experiments" <> pure experiment_sid
+    _                                              -> pure ""
 
   fromPathSegments =
-        (About         <$ segment "about"
+        (About        <$ segment "about"
     <|> Me            <$ segment "me"
     <|> Errors        <$ segment "errors"
     <|> Portal        <$ segment "portal"

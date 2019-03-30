@@ -33,7 +33,7 @@ data Loader a
   = Loaded a
   | Loading
   | CantLoad
-  deriving (Generic, Typeable, NFData)
+  deriving (Generic, Typeable, NFData, Show)
 
 
 

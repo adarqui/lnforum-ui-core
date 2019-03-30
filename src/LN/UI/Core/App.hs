@@ -82,13 +82,11 @@ runCore st core_result action         = runCoreM st $ do
 
   fetch_init = do
     lr <- api getMe'
-    rehtie
-      lr
-      (const cantLoad_init)
-      $ \user_pack -> do
-        let UserResponse{..} = user_pack
-        modify (\st_->st_{_l_m_me = Loaded $ Just user_pack, _meId = userResponseId})
-        done
+    liftIO $ putStrLn $ "WTF: me: " <> show lr
+    rehtie lr (const cantLoad_init) $ \user_pack -> do
+      let UserResponse{..} = user_pack
+      modify (\st_->st_{_l_m_me = Loaded $ Just user_pack, _meId = userResponseId})
+      done
 
   load_init = modify (\st'->st'{_l_m_me = Loading}) *> next
 
@@ -99,7 +97,7 @@ runCore st core_result action         = runCoreM st $ do
   setRoute route_with = modify (\st'->st'{_route = route_with})
 
   act_route route_with = setRoute route_with *> case route_with of
-    RouteWith Home _   -> start
+    RouteWith Home _   -> basedOn load_boot fetch_boot
     RouteWith About _  -> start
     RouteWith Portal _ -> start
 
@@ -191,6 +189,47 @@ runCore st core_result action         = runCoreM st $ do
         })
         done
 
+
+
+
+    load_forum :: MonadIO m => CoreM m CoreResult
+    load_forum = modify (\st'->st'{_l_m_forum = Loading}) *> next
+
+    cantLoad_forum :: MonadIO m => CoreM m CoreResult
+    cantLoad_forum = modify (\st'->st'{_l_m_forum = CantLoad}) *> done
+
+    fetch_forum :: MonadIO m => ForumName -> CoreM m CoreResult
+    fetch_forum forum_sid = do
+      Store{..} <- get
+      lr <- api $ getForumPack' 1
+      rehtie lr (const cantLoad_forum) $ \forum_pack -> do
+        let ForumPackResponse{..} = forum_pack
+        modify (\st'->st'{
+           _l_m_forum      = Loaded $ Just forum_pack
+         , _m_forumRequest = Just $ forumResponseToForumRequest forumPackResponseForum
+        })
+        done
+
+
+
+
+    load_boot :: MonadIO m => CoreM m CoreResult
+    load_boot = modify (\st'->st'{_l_boards = Loading}) *> next
+
+    cantLoad_boot :: MonadIO m => CoreM m CoreResult
+    cantLoad_boot = modify (\st'->st'{_l_boards = CantLoad}) *> done
+
+    fetch_boot :: MonadIO m => CoreM m CoreResult
+    fetch_boot = do
+      Store{..} <- get
+      lr <- api $ getBoardPacks'
+      liftIO $ putStrLn $ "WTF: board_packs: " <> show lr
+      rehtie lr (const cantLoad_boot) $ \board_packs -> do
+        let BoardPackResponses{..} = board_packs
+        modify (\st'->st'{
+           _l_boards      = Loaded $ idmapFrom boardPackResponseBoardId boardPackResponses
+        })
+        done
 
 
 

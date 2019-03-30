@@ -85,22 +85,24 @@ setVisibility !request@ForumRequest{..} !input =
 
 
 setTag :: ForumRequest -> Text -> Action
-setTag !request@ForumRequest{..} !input =
-   ApplyState (\st->
-     st{
-       _m_forumRequest = Just $ request{forumRequestStateTag = Just input}
-     })
+setTag !request@ForumRequest{..} !input = Nop
+  -- TODO FIXME: put state elsewhere
+  -- ApplyState (\st->
+  --   st{
+  --     _m_forumRequest = Just $ request{forumRequestStateTag = Just input}
+  --   })
 
 
 
 addTag :: ForumRequest -> Action
-addTag !request@ForumRequest{..} =
-  ApplyState (\st->
-    st{
-      _m_forumRequest = Just $ request{forumRequestTags = tags, forumRequestStateTag = Nothing}
-    })
-  where
-  (tags, _) = Tag.addTag forumRequestTags forumRequestStateTag
+addTag !request@ForumRequest{..} = Nop
+  -- TODO FIXME: put state elsewhere
+  -- ApplyState (\st->
+  --   st{
+  --     _m_forumRequest = Just $ request{forumRequestTags = tags, forumRequestStateTag = Nothing}
+  --   })
+  -- where
+  -- (tags, _) = Tag.addTag forumRequestTags forumRequestStateTag
 
 
 

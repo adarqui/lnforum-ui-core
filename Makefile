@@ -1,6 +1,9 @@
 build:
 	stack build --fast
 
+build-watch:
+	stack build --fast --file-watch
+
 clean:
 	stack clean
 

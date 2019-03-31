@@ -221,6 +221,9 @@ runCore st core_result action         = runCoreM st $ do
     fetch_boot :: MonadIO m => CoreM m CoreResult
     fetch_boot = do
       Store{..} <- get
+      -- getForumPack 1
+      -- getUsersOnline
+      -- getRecentPosts
       lr <- api $ getBoardPacks'
       rehtie lr (const cantLoad_boot) $ \board_packs -> do
         let BoardPackResponses{..} = board_packs

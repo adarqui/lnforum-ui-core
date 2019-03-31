@@ -62,7 +62,7 @@ library
                      , time
                      , transformers
                      , tuple
-                     , web-routes == 99.99
+                     , web-routes == 0.27.14.2
                      , haskell-api-helpers-shared
                      , haskell-ebyam
                      , haskell-either-helpers
@@ -87,7 +87,7 @@ test-suite lnforum-ui-test
   build-depends:       base
                      , hspec
                      , text
-                     , web-routes
+                     , web-routes == 0.27.14.2
                      , lnforum-types-gen
                      , lnforum-ui-core
   ghc-options:         -Wall -O2 -threaded -rtsopts -with-rtsopts=-N
